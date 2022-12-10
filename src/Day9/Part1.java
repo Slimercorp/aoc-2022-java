@@ -39,7 +39,7 @@ public class Part1 {
 					default -> System.out.println("Error!");
 				}
 				
-				if (pointHead.distance(pointTail) > 1.5) {
+				if (pointHead.distance(pointTail) > 1.42) {
 					pointTail.setLocation(pointHead);
 					switch (c) {
 						case 'U' -> pointTail.move(pointTail.x, pointTail.y - 1);
