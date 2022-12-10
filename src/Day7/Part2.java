@@ -6,14 +6,19 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 import java.util.Stack;
 import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Part1 {
+public class Part2 {
 	
 	private static Folder root = new Folder("");
+	private final static int STORAGE_SIZE = 70000000;
+	private final static int NEED_SPACE_OVERALL = 30000000;
+	private static int needSpace = 0;
+	private static TreeSet<Integer> set = new TreeSet<>();
 
 	public static void main(String[] args) throws IOException {	
 		String path = ".\\src\\Day7\\data.txt";
@@ -66,7 +71,10 @@ public class Part1 {
 		
 		countSizeOfFolder(root);
 		
-		System.out.println(getSize1(root));
+		needSpace = NEED_SPACE_OVERALL - (70000000 - root.getSize());
+		fillSet(root);
+		
+		System.out.println(set.first());
 	}
 	
 	public static void storeFile(String path, int size, String name) {
@@ -107,19 +115,15 @@ public class Part1 {
 		temp.getFiles().add(new File(name, size));
 	}
 
-	public static int getSize1(Folder folder) {
-		int sum = 0;
-		
-		if (folder.getSize() <= 100000) {
-			sum += folder.getSize();
+	public static void fillSet(Folder folder) {
+		int sizeTemp = folder.getSize();
+		if (sizeTemp >= needSpace) {
+			set.add(sizeTemp);
 		}
 		
-		List<Folder> otherFolders = folder.getFolders();
-		for (Folder f : otherFolders) {
-			sum += getSize1(f);
+		for (Folder f : folder.getFolders()) {
+			fillSet(f);
 		}
-		
-		return sum;
 	}
 	
 	public static void countSizeOfFolder(Folder folder) {
